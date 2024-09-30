@@ -15,4 +15,15 @@ async function getCoordinates(city) {
     }
 }
 
-console.log(await getCoordinates("Sao Paulo"));
+async function getWeather(city) {
+    try {
+        const { lat, lon } = await getCoordinates(city);
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}`);
+        const { main: { feels_like }, weather: [{ description }] } = await res.json();
+        return { feels_like, description };
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+console.log(await getWeather("Sao Paulo"));
